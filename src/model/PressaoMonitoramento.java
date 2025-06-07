@@ -13,6 +13,6 @@ public class PressaoMonitoramento extends DispositivoDeMonitoramento {
         Random rand = new Random();
         int sistolica = 90 + rand.nextInt(60);
         int diastolica = 60 + rand.nextInt(40);
-        return new Dado("Pressão", sistolica + "/" + diastolica, java.time.LocalDateTime.now(), "PacienteY");
+        return new Dado("Pressão", sistolica + "/" + diastolica, java.time.LocalDateTime.now());
     }
 }

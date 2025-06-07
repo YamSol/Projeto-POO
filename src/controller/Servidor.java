@@ -17,9 +17,9 @@ public class Servidor {
     }
 
     // Recebe os dados do Concentrador e os envia para o banco de dados
-    public void receberDadosDoConcentrador(List<Dado> dados) {
-        bancoDeDados.salvarDados(dados);
-    }
+//    public void receberDadosDoConcentrador(List<Dado> dados) {
+//        bancoDeDados.salvarDados(dados);
+//    }
 
     // Método para adicionar um paciente
     public void cadastrarPaciente(Paciente p) {
@@ -34,11 +34,12 @@ public class Servidor {
     }
 
     // Método para buscar um paciente pelo ID
-    public Paciente buscarPaciente(String id) {
-        return pacientes.stream()
-                .filter(paciente -> paciente.getId().equals(id)) // Filtra pela ID
-                .findFirst() // Retorna o primeiro paciente encontrado
-                .orElse(null); // Retorna null se não encontrado
+    public Paciente buscarPacientePorId(String id) {
+//        return pacientes.stream()
+//                .filter(paciente -> paciente.getId().equals(id)) // Filtra pela ID
+//                .findFirst() // Retorna o primeiro paciente encontrado
+//                .orElse(null); // Retorna null se não encontrado
+        return bancoDeDados.buscarPacientePorId(id);
     }
 
     // Método para listar todos os pacientes cadastrados
@@ -47,13 +48,13 @@ public class Servidor {
     }
 
     // Método para obter os dados de um paciente específico
-    public List<Dado> obterDadosDoPaciente(String id) {
-        Paciente paciente = buscarPaciente(id);
-        if (paciente != null) {
-            return paciente.gerarLeituras(); // Retorna os dados gerados pelos dispositivos do paciente
-        }
-        return new ArrayList<>(); // Retorna uma lista vazia caso o paciente não seja encontrado
-    }
+//    public List<Dado> obterDadosDoPaciente(String id) {
+//        Paciente paciente = buscarPaciente(id);
+//        if (paciente != null) {
+//            return paciente.gerarLeituras(); // Retorna os dados gerados pelos dispositivos do paciente
+//        }
+//        return new ArrayList<>(); // Retorna uma lista vazia caso o paciente não seja encontrado
+//    }
 
 
 }

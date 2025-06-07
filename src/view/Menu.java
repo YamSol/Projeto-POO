@@ -1,10 +1,7 @@
 package view;
 
-import model.BatimentoCardiacoMonitoramento;
-import model.PressaoMonitoramento;
-import model.TemperaturaMonitoramento;
+import model.*;
 import controller.Servidor;
-import model.Paciente;
 
 import java.util.List;
 import java.util.Scanner;
@@ -79,13 +76,12 @@ public class Menu {
     public void lerDadosPaciente() {
         System.out.println("Digite o ID do paciente:");
         String id = scanner.nextLine();
-        Paciente paciente = servidor.buscarPaciente(id);
-        if (paciente == null) {
-            System.out.println("Paciente não encontrado.");
+        Paciente paciente = servidor.buscarPacientePorId(id);
+        System.out.println("Nome do paciente: " + paciente.getNome());
+        System.out.println("ID do paciente: " + paciente.getId());
+        for(Dado dado: paciente.getDadosPaciente()){
+            System.out.println(dado.getTipo() + ": " + dado.getValor() + " Momento da leitura: " + dado.getTimestamp());
         }
-        System.out.println("Paciente: "+paciente.getNome());
-        paciente.gerarLeituras().forEach(dado -> System.out.println(dado.getTipo() + ": " + dado.getValor()));
-
     }
 
     public void apagarPaciente() {

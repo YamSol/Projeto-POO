@@ -9,12 +9,16 @@ public class Paciente implements Serializable {
     private String nome;
     private String id;
     private List<DispositivoDeMonitoramento> dispositivos;
+    private List<Dado>  dadosPaciente;
 
     public Paciente(String nome, String id) {
         this.nome = nome;
         this.id = id;
         this.dispositivos = new ArrayList<>();
+        this.dadosPaciente = new ArrayList<>();
     }
+
+    public void adicionarDadosPaciente(Dado dado) {dadosPaciente.add(dado);}
 
     public void adicionarDispositivo(DispositivoDeMonitoramento d) {
         dispositivos.add(d);
@@ -35,5 +39,6 @@ public class Paciente implements Serializable {
     // Getters e Setters
     public String getNome() { return nome; }
     public String getId() { return id; }
+    public List<Dado> getDadosPaciente() { return dadosPaciente; }
     public List<DispositivoDeMonitoramento> getDispositivos() { return dispositivos; }
 }
