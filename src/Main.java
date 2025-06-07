@@ -20,23 +20,6 @@ public class Main {
         // Inicializa o concentrador de dados (para simulação de envio de dados dos dispositivos)
         ConcentradorDeDados concentradorDeDados = new ConcentradorDeDados();
 
-        // Exemplo de criação de pacientes e dispositivos
-        Paciente paciente1 = new Paciente("Maria", "123");
-        Paciente paciente2 = new Paciente("José", "456");
-
-        // Criando dispositivos e associando ao paciente
-        DispositivoDeMonitoramento dispositivo1 = new TemperaturaMonitoramento();
-        DispositivoDeMonitoramento dispositivo2 = new PressaoMonitoramento();
-        DispositivoDeMonitoramento dispositivo3 = new BatimentoCardiacoMonitoramento();
-
-        paciente1.adicionarDispositivo(dispositivo1);
-        paciente2.adicionarDispositivo(dispositivo2);
-        paciente2.adicionarDispositivo(dispositivo3);
-
-        // Cadastra os pacientes
-        servidor.cadastrarPaciente(paciente1);
-        servidor.cadastrarPaciente(paciente2);
-
         // Menu interativo para o médico
         while (true) {
             menu.exibirOpcoes();
