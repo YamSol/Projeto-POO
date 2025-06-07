@@ -1,4 +1,4 @@
-package visualizacao;
+package view;
 
 public class Console {
 }

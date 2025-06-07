@@ -1,7 +1,7 @@
-package logica;
+package controller;
 
-import entidades.Dado;
-import entidades.Paciente;
+import model.Dado;
+import model.Paciente;
 import database.BancoDeDados;
 import java.util.List;
 import java.util.ArrayList;

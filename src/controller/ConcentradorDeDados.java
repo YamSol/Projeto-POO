@@ -1,7 +1,7 @@
-package logica;
+package controller;
 
-import entidades.Dado;
-import logica.Servidor;
+import model.Dado;
+
 import java.util.List;
 
 public class ConcentradorDeDados {

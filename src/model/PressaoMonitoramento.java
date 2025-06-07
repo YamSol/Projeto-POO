@@ -1,5 +1,5 @@
 
-package entidades;
+package model;
 
 import java.util.Random;
 

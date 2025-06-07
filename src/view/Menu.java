@@ -1,10 +1,10 @@
-package visualizacao;
+package view;
 
-import entidades.BatimentoCardiacoMonitoramento;
-import entidades.PressaoMonitoramento;
-import entidades.TemperaturaMonitoramento;
-import logica.Servidor;
-import entidades.Paciente;
+import model.BatimentoCardiacoMonitoramento;
+import model.PressaoMonitoramento;
+import model.TemperaturaMonitoramento;
+import controller.Servidor;
+import model.Paciente;
 
 import java.util.List;
 import java.util.Scanner;

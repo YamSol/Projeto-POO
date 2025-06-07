@@ -1,7 +1,7 @@
 package database;
 
-import entidades.Paciente;
-import entidades.Dado;
+import model.Paciente;
+import model.Dado;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

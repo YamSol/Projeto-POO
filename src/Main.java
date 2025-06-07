@@ -1,7 +1,7 @@
-import logica.Servidor;
-import logica.ConcentradorDeDados;
+import controller.Servidor;
+import controller.ConcentradorDeDados;
 import database.BancoDeDados;
-import visualizacao.Menu;
+import view.Menu;
 
 public class Main {
     public static void main(String[] args) {
