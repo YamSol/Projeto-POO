@@ -5,6 +5,8 @@ import entidades.PressaoMonitoramento;
 import entidades.TemperaturaMonitoramento;
 import logica.Servidor;
 import entidades.Paciente;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -93,8 +95,22 @@ public class Menu {
     }
 
     public void listarPacientes() {
-        // Simular listagem de pacientes
-        System.out.println("Pacientes registrados:");
-//        servidor.
+        // Obtém a lista de pacientes do servidor
+        List<Paciente> pacientes = servidor.obterTodosPacientes();
+
+        if (pacientes.isEmpty()) {
+            System.out.println("Nenhum paciente registrado.");
+        } else {
+            System.out.println("==== PACIENTES REGISTRADOS:");
+            for (Paciente paciente : pacientes) {
+                // Exibe o nome e ID do paciente
+                System.out.println("- " + paciente.getNome() + "[" + paciente.getId() + "]");
+                // Aqui, você pode exibir também os dispositivos, se desejar
+                paciente.getDispositivos().forEach(dispositivo ->
+                        System.out.println("  Sensor: " + dispositivo.getTipo())
+                );
+            }
+        }
     }
+
 }
