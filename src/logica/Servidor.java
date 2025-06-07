@@ -13,7 +13,8 @@ public class Servidor {
         this.bancoDeDados = bancoDeDados;
     }
 
-    public void receberDados(List<Dado> dados) {
+    // Recebe os dados do Concentrador e os envia para o banco de dados
+    public void receberDadosDoConcentrador(List<Dado> dados) {
         bancoDeDados.salvarDados(dados);
     }
 

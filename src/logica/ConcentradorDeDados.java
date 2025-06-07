@@ -11,7 +11,7 @@ public class ConcentradorDeDados {
     }
 
     public void enviarDados(Servidor servidor, List<Dado> dados) {
-        servidor.receberDados(dados);
+        servidor.receberDadosDoConcentrador(dados);
     }
 }
 
