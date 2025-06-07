@@ -1,10 +1,7 @@
 import logica.Servidor;
 import logica.ConcentradorDeDados;
 import database.BancoDeDados;
-import menu.Menu;
-import entidades.*;
-
-import java.util.List;
+import visualizacao.Menu;
 
 public class Main {
     public static void main(String[] args) {

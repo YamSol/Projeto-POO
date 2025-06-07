@@ -1,4 +1,4 @@
-package menu;
+package visualizacao;
 
 import entidades.BatimentoCardiacoMonitoramento;
 import entidades.PressaoMonitoramento;
