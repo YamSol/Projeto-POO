@@ -10,7 +10,7 @@ public class TemperaturaMonitoramento extends DispositivoDeMonitoramento {
     @Override
     public Dado gerarDadoAleatorio() {
         Random rand = new Random();
-        double temperatura = 34.5 + (39.0 - 34.5) * rand.nextDouble();
-        return new Dado("Temperatura", String.format("%.2f", temperatura), java.time.LocalDateTime.now(), "PacienteX");
+        double temperatura = 36.5 + (39.0 - 36.5) * rand.nextDouble();
+        return new Dado("Temperatura", String.format("%.1f", temperatura), java.time.LocalDateTime.now(), "PacienteX");
     }
 }
