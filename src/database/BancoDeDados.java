@@ -38,6 +38,11 @@ public class BancoDeDados {
         }
     }
 
+//    public List<Paciente> buscarPacientes() {
+//        List<Paciente> pacientes = new ArrayList<>();
+//
+//    }
+
     public List<Dado> obterDadosDoPaciente(String id) {
         List<Dado> dados = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("dados/leituras/dados.txt"))) {

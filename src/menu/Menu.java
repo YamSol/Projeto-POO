@@ -51,6 +51,6 @@ public class Menu {
     public void listarPacientes() {
         // Simular listagem de pacientes
         System.out.println("Pacientes registrados:");
-        // Aqui você pode implementar um método para listar todos os pacientes
+//        servidor.
     }
 }

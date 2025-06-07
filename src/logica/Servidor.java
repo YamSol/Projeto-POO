@@ -32,4 +32,6 @@ public class Servidor {
     public List<Dado> obterDadosDoPaciente(String id) {
         return bancoDeDados.obterDadosDoPaciente(id);
     }
+
+//    public List<Paciente> obterPacientes() {}
 }
