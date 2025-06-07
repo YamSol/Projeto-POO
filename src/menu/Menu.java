@@ -5,7 +5,7 @@ import entidades.Paciente;
 import java.util.Scanner;
 
 public class Menu {
-    private Scanner scanner;
+    public Scanner scanner;
     private Servidor servidor;
 
     public Menu(Servidor servidor) {

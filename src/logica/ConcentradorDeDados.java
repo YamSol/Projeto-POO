@@ -1,7 +1,7 @@
 package logica;
 
 import entidades.Dado;
-import entidades.Servidor;
+import logica.Servidor;
 import java.util.List;
 
 public class ConcentradorDeDados {
