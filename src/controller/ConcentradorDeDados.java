@@ -2,16 +2,18 @@ package controller;
 
 import model.Dado;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConcentradorDeDados {
+    List<Dado> dadosRecebidos = new ArrayList<>();
 
     public void receberDados(List<Dado> dados) {
-        System.out.println("Dados recebidos pelo concentrador.");
+        dadosRecebidos.addAll(dados);
     }
 
-    public void enviarDados(Servidor servidor, List<Dado> dados) {
-        servidor.receberDadosDoConcentrador(dados);
+    public void enviarDados(Servidor servidor) {
+        servidor.receberDadosDoConcentrador(dadosRecebidos);
     }
 }
 
