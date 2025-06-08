@@ -29,14 +29,21 @@ public class Menu {
         System.out.print("Digite o nome do paciente: ");
         String nome = scanner.nextLine();
 
-        System.out.print("Digite o ID do paciente: ");
-        String id = scanner.nextLine();
+        String id;
+        while (true) {
+            System.out.print("Digite o ID do paciente: ");
+            id = scanner.nextLine();
+
+            if (servidor.buscarPacientePorId(id) != null) {
+                System.out.println("Já existe um paciente com esse ID. Por favor, escolha outro.\n");
+            } else {
+                break;
+            }
+        }
         System.out.println();
 
-        // Criação do paciente
         Paciente paciente = new Paciente(nome, id);
 
-        // Pergunta ao usuário quais sensores ele deseja adicionar
         boolean continuar = true;
         while (continuar) {
             System.out.println("Escolha um dispositivo para adicionar ao paciente:");
@@ -50,31 +57,53 @@ public class Menu {
             int escolha = scanner.nextInt();
             scanner.nextLine();
 
+            String tipoDispositivo = null;
+
             switch (escolha) {
                 case 1:
-                    paciente.adicionarDispositivo(new DispositivoDeTemperatura());
-                    System.out.println("Dispositivo de Temperatura adicionado com sucesso!");
-                    System.out.println();
+                    tipoDispositivo = "Temperatura";
                     break;
                 case 2:
-                    paciente.adicionarDispositivo(new DispositivoDePressao());
-                    System.out.println("Dispositivo de Pressão adicionado com sucesso!");
-                    System.out.println();
+                    tipoDispositivo = "Pressão";
                     break;
                 case 3:
-                    paciente.adicionarDispositivo(new DispositivoDeBatimentoCardiaco());
-                    System.out.println("Dispositivo de Batimento Cardíaco adicionado com sucesso!");
-                    System.out.println();
+                    tipoDispositivo = "Batimento Cardíaco";
                     break;
                 case 4:
                     continuar = false;
-                    System.out.println("Cadastro dos dispositivos finalizado.");
-                    System.out.println();
-                    break;
+                    System.out.println("Cadastro dos dispositivos finalizado.\n");
+                    continue;
                 default:
-                    System.out.println("Opção inválida! Tente novamente.");
-                    System.out.println();
+                    System.out.println("Opção inválida! Tente novamente.\n");
+                    continue;
+            }
+
+            // Verifica se o dispositivo já foi adicionado
+            boolean jaAdicionado = false;
+            for (DispositivoDeMonitoramento d : paciente.getDispositivos()) {
+                if (d.getTipo().equals(tipoDispositivo)) {
+                    jaAdicionado = true;
                     break;
+                }
+            }
+
+            if (jaAdicionado) {
+                System.out.println("Este tipo de dispositivo já foi adicionado!\n");
+            } else {
+                switch (escolha) {
+                    case 1:
+                        paciente.adicionarDispositivo(new DispositivoDeTemperatura());
+                        System.out.println("Dispositivo de Temperatura adicionado com sucesso!\n");
+                        break;
+                    case 2:
+                        paciente.adicionarDispositivo(new DispositivoDePressao());
+                        System.out.println("Dispositivo de Pressão adicionado com sucesso!\n");
+                        break;
+                    case 3:
+                        paciente.adicionarDispositivo(new DispositivoDeBatimentoCardiaco());
+                        System.out.println("Dispositivo de Batimento Cardíaco adicionado com sucesso!\n");
+                        break;
+                }
             }
         }
 
@@ -115,9 +144,10 @@ public class Menu {
             int contador = 1;
             for (Paciente paciente : pacientes) {
                 System.out.println(contador + " - Nome: " + paciente.getNome() + ", ID: " + paciente.getId());
-                System.out.println();
                 contador++;
             }
+
+            System.out.println();
         }
     }
 }
