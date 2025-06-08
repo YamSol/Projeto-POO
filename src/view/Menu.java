@@ -141,6 +141,12 @@ public class Menu {
 
         Paciente paciente = servidor.buscarPacientePorId(id);
 
+        if (paciente == null) {
+            System.out.println("Paciente com ID: " + id + " não encontrado.");
+            System.out.println();
+            return;
+        }
+
         System.out.println("Nome do paciente: " + paciente.getNome() + ", ID do paciente: " + paciente.getId());
 
         for (Dado dado : paciente.getDadosPaciente()) {
