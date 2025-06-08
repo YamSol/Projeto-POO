@@ -6,39 +6,41 @@ import java.util.List;
 
 public class Paciente implements Serializable {
     private static final long serialVersionUID = 1L; // Número de versão da serialização
+
     private String nome;
     private String id;
+    private List<Dado> dadosPaciente;
     private List<DispositivoDeMonitoramento> dispositivos;
-    private List<Dado>  dadosPaciente;
 
     public Paciente(String nome, String id) {
         this.nome = nome;
         this.id = id;
-        this.dispositivos = new ArrayList<>();
         this.dadosPaciente = new ArrayList<>();
+        this.dispositivos = new ArrayList<>();
     }
 
-    public void adicionarDadosPaciente(Dado dado) {dadosPaciente.add(dado);}
+    public void adicionarDadosPaciente(Dado dado) {
+        dadosPaciente.add(dado);
+    }
 
     public void adicionarDispositivo(DispositivoDeMonitoramento d) {
         dispositivos.add(d);
     }
 
-    public void removerDispositivo(DispositivoDeMonitoramento d) {
-        dispositivos.remove(d);
+    // Getters
+    public String getNome() {
+        return nome;
     }
 
-    public List<Dado> gerarLeituras() {
-        List<Dado> leituras = new ArrayList<>();
-        for (DispositivoDeMonitoramento dispositivo : dispositivos) {
-            leituras.add(dispositivo.gerarDadoAleatorio());
-        }
-        return leituras;
+    public String getId() {
+        return id;
     }
 
-    // Getters e Setters
-    public String getNome() { return nome; }
-    public String getId() { return id; }
-    public List<Dado> getDadosPaciente() { return dadosPaciente; }
-    public List<DispositivoDeMonitoramento> getDispositivos() { return dispositivos; }
+    public List<Dado> getDadosPaciente() {
+        return dadosPaciente;
+    }
+
+    public List<DispositivoDeMonitoramento> getDispositivos() {
+        return dispositivos;
+    }
 }

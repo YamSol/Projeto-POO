@@ -3,35 +3,27 @@ package database;
 import model.DispositivoDeMonitoramento;
 import model.Paciente;
 import model.Dado;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class BancoDeDados {
-    private String pastaDeArmazenamento = "dados/pacientes";
+    private final String pastaDeArmazenamento = "dados/leituras/pacientes.txt";
 
-//    public void salvarDados(List<Dado> dados) {
-//        // Simulação de gravação de dados
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados/leituras/dados.txt", true))) {
-//            for (Dado dado : dados) {
-//                writer.write(dado.getPacienteId() + "," + dado.getTipo() + "," + dado.getValor() + "," + dado.getTimestamp());
-//                writer.newLine();
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Erro ao salvar dados: " + e.getMessage());
-//        }
-//    }
-
+    // Salva os dados de um paciente no arquivo
     public void salvarPaciente(Paciente p) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados/leituras/pacientes.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(pastaDeArmazenamento, true))) {
             writer.write("PacienteId:" + p.getId() + "," + "Nome: " + p.getNome());
             writer.newLine();
-            for (DispositivoDeMonitoramento dispositivoDeMonitoramento : p.getDispositivos()) {
-                writer.write(dispositivoDeMonitoramento.getTipo() + ","
-                        + dispositivoDeMonitoramento.gerarDadoAleatorio().getValor() + ","
-                        + dispositivoDeMonitoramento.gerarDadoAleatorio().getTimestamp());
+
+            for (DispositivoDeMonitoramento dispositivo : p.getDispositivos()) {
+                Dado dado = dispositivo.gerarDadoAleatorio();
+                writer.write(dispositivo.getTipo() + "," +
+                        dado.getValor() + "," +
+                        dado.getUnidade() + "," +
+                        dado.getTimestamp());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -39,38 +31,35 @@ public class BancoDeDados {
         }
     }
 
+    // Busca um paciente pelo ID
     public Paciente buscarPacientePorId(String idBuscado) {
         Paciente paciente = null;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("dados/leituras/pacientes.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(pastaDeArmazenamento))) {
             String linha;
             boolean pacienteEncontrado = false;
 
             while ((linha = reader.readLine()) != null) {
                 if (linha.startsWith("PacienteId:")) {
-                    // Extração do ID
                     String[] partes = linha.split(",");
                     String id = partes[0].split(":")[1];
 
                     if (idBuscado.equals(id)) {
                         String nome = partes[1].split(":")[1].trim();
-                        paciente = new Paciente(nome, id); // Assume que há construtor Paciente(id, nome)
+                        paciente = new Paciente(nome, id);
                         pacienteEncontrado = true;
-                        continue;
                     } else if (pacienteEncontrado) {
-                        // Chegamos a um novo paciente, então paramos a leitura
                         break;
                     }
                 } else if (pacienteEncontrado && paciente != null) {
-                    // Leitura de dispositivo
                     String[] dados = linha.split(",");
-                    if (dados.length == 3) {
+                    if (dados.length == 4) {
                         String tipo = dados[0].trim();
                         String valor = dados[1].trim();
-                        LocalDateTime timestamp = LocalDateTime.parse(dados[2].trim());
+                        String unidade = dados[2].trim();
+                        LocalDateTime timestamp = LocalDateTime.parse(dados[3].trim());
 
-                        Dado dado = new Dado(tipo,valor,timestamp);
-
+                        Dado dado = new Dado(tipo, valor, unidade, timestamp);
                         paciente.adicionarDadosPaciente(dado);
                     }
                 }
@@ -82,21 +71,72 @@ public class BancoDeDados {
         return paciente;
     }
 
+    // Lista todos os pacientes salvos
+    public List<Paciente> listarPacientes() {
+        List<Paciente> pacientes = new ArrayList<>();
 
-    public Paciente buscarPaciente(String id) {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(pastaDeArmazenamento + "/" + id + ".ser"))) {
-            return (Paciente) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Erro ao buscar paciente: " + e.getMessage());
-            return null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(pastaDeArmazenamento))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                if (linha.startsWith("PacienteId:")) {
+                    String[] partes = linha.split(",");
+                    String id = partes[0].split(":")[1];
+                    String nome = partes[1].split(":")[1].trim();
+                    Paciente paciente = new Paciente(nome, id);
+                    pacientes.add(paciente);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
         }
+
+        return pacientes;
     }
 
-
+    // Remove um paciente e seus dados do arquivo
     public void removerPaciente(String id) {
-        File pacienteFile = new File(pastaDeArmazenamento + "/" + id + ".ser");
-        if (pacienteFile.exists()) {
-            pacienteFile.delete();
+        File arquivoOriginal = new File(pastaDeArmazenamento);
+        File arquivoTemporario = new File("temp.txt");
+
+        try (
+                BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemporario))
+        ) {
+            String linha;
+            boolean dentroDoPaciente = false;
+
+            while ((linha = reader.readLine()) != null) {
+                if (linha.startsWith("PacienteId:")) {
+                    if (linha.contains("PacienteId:" + id)) {
+                        dentroDoPaciente = true;
+                        continue;
+                    } else {
+                        dentroDoPaciente = false;
+                    }
+                }
+
+                if (!dentroDoPaciente) {
+                    writer.write(linha);
+                    writer.newLine();
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao processar arquivo: " + e.getMessage());
+            return;
         }
+
+        // Substitui o arquivo original pelo temporário
+        if (arquivoOriginal.delete()) {
+            if (!arquivoTemporario.renameTo(arquivoOriginal)) {
+                System.out.println("Erro ao renomear o arquivo temporário.");
+            } else {
+                System.out.println("Paciente com " + id + " removido com sucesso.");
+            }
+        } else {
+            System.out.println("Erro ao excluir o arquivo original.");
+        }
+
+        System.out.println();
     }
 }

@@ -17,30 +17,31 @@ public class Main {
         // Inicializa o concentrador de dados (para simulação de envio de dados dos dispositivos)
         ConcentradorDeDados concentradorDeDados = new ConcentradorDeDados();
 
-        // Menu interativo para o médico
         while (true) {
             menu.exibirOpcoes();
             int opcao = menu.scanner.nextInt();
-            menu.scanner.nextLine(); // Consume the newline character left by nextInt()
+            menu.scanner.nextLine();
 
             switch (opcao) {
-                case 1: // Cadastrar paciente
+                case 1:
                     menu.cadastrarPaciente();
                     break;
-                case 2: // Ler dados de um paciente
+                case 2:
                     menu.lerDadosPaciente();
                     break;
-                case 3: // Apagar paciente
+                case 3:
                     menu.apagarPaciente();
                     break;
-                case 4: // Listar pacientes
+                case 4:
                     menu.listarPacientes();
                     break;
-                case 5: // Sair
+                case 5:
                     System.out.println("Saindo do sistema.");
                     return;
                 default:
-                    System.out.println("Opção inválida. Tente novamente.");
+                    System.out.println("Opção inválida! Tente novamente.");
+                    System.out.println();
+                    break;
             }
         }
     }
