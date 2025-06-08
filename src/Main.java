@@ -1,5 +1,4 @@
 import controller.Servidor;
-import controller.ConcentradorDeDados;
 import database.BancoDeDados;
 import view.Menu;
 
@@ -14,10 +13,16 @@ public class Main {
         // Inicializa o menu para interação com o médico
         Menu menu = new Menu(servidor);
 
-        // Inicializa o concentrador de dados (para simulação de envio de dados dos dispositivos)
-        ConcentradorDeDados concentradorDeDados = new ConcentradorDeDados();
+        boolean distanciaRegistrada = false;
 
         while (true) {
+            if (!distanciaRegistrada) {
+                System.out.println("Antes de continuar, registre a distância do paciente.");
+                menu.distanciaPacientes();
+                distanciaRegistrada = true;
+                continue;
+            }
+
             menu.exibirOpcoes();
             int opcao = menu.scanner.nextInt();
             menu.scanner.nextLine();

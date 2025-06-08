@@ -1,6 +1,5 @@
 package controller;
 
-import model.Dado;
 import model.Paciente;
 import database.BancoDeDados;
 import java.util.List;
@@ -8,17 +7,17 @@ import java.util.ArrayList;
 
 public class Servidor {
     private BancoDeDados bancoDeDados;
-    private List<Paciente> pacientes; // Lista de pacientes cadastrados
+    private List<Paciente> pacientes;
 
     public Servidor(BancoDeDados bancoDeDados) {
         this.bancoDeDados = bancoDeDados;
-        this.pacientes = new ArrayList<>(); // Inicializa a lista de pacientes
+        this.pacientes = new ArrayList<>();
     }
 
     // Método para cadastrar um paciente
     public void cadastrarPaciente(Paciente p) {
-        pacientes.add(p); // Adiciona o paciente à lista interna
-        bancoDeDados.salvarPaciente(p); // Salva o paciente no banco de dados
+        pacientes.add(p);
+        bancoDeDados.salvarPaciente(p);
     }
 
     // Método para buscar os dados de um paciente específico
@@ -28,7 +27,7 @@ public class Servidor {
 
     // Método para remover um paciente pelo ID
     public void removerPaciente(String id) {
-        bancoDeDados.removerPaciente(id); // Remove o paciente do banco de dados
+        bancoDeDados.removerPaciente(id);
     }
 
     // Método para listar os pacientes cadastrados

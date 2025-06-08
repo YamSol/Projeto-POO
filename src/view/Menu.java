@@ -1,5 +1,6 @@
 package view;
 
+import controller.ConcentradorDeDados;
 import model.*;
 import controller.Servidor;
 import java.util.List;
@@ -8,6 +9,9 @@ import java.util.Scanner;
 public class Menu {
     public Scanner scanner;
     private Servidor servidor;
+
+    // Inicializa o concentrador de dados (para simulação de envio de dados dos dispositivos)
+    ConcentradorDeDados concentradorDeDados = new ConcentradorDeDados();
 
     public Menu(Servidor servidor) {
         this.scanner = new Scanner(System.in);
@@ -23,6 +27,26 @@ public class Menu {
         System.out.println("5 - Sair");
         System.out.println();
         System.out.print("Opção: ");
+    }
+
+    public void distanciaPacientes() {
+        System.out.print("Digite a distância entre o paciente e o concentrador: ");
+
+        Double distancia;
+        while (true) {
+            distancia = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (distancia < 0) {
+                System.out.print("Distância não pode ser negativa! Tente novamente: ");
+            } else if (distancia > 10) {
+                System.out.print("Distância muito alta! Tente novamente: ");
+            } else {
+                break;
+            }
+        }
+
+        concentradorDeDados.distanciaPaciente(distancia);
     }
 
     public void cadastrarPaciente() {
