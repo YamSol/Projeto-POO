@@ -92,4 +92,7 @@ Este projeto tem fins educacionais e não deve ser usado em aplicações clínic
   [@luccazogbi](https://github.com/luccazogbi) • Collaborator
 
 - **Lucas do Lago Figueiredo**  
-  [@olucas-fg](https://github.com/olucas-fg)
+  [@olucas-fg](https://github.com/olucas-fg) • Collaborator
+
+- **Yam Sol Bertamini**  
+  [@yamsol](https://github.com/YamSol) • Collaborator
