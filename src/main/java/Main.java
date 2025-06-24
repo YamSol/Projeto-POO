@@ -1,6 +1,8 @@
-import controller.Servidor;
-import database.BancoDeDados;
-import view.Menu;
+package main.java;
+
+import main.java.controller.Servidor;
+import main.java.database.BancoDeDados;
+import main.java.view.Menu;
 
 public class Main {
     public static void main(String[] args) {

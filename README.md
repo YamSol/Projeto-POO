@@ -14,14 +14,14 @@ Projeto-POO-master/
 │   └── pacientes/                  # Informações dos pacientes
 │
 ├── src/                            # Código-fonte principal
-│   ├── controller/                 # Camada de controle e orquestração
+│   ├── main.java.controller/                 # Camada de controle e orquestração
 │   │   ├── ConcentradorDeDados.java
 │   │   └── Servidor.java
 │   │
-│   ├── database/                   # Simulação de banco de dados
+│   ├── main.java.database/                   # Simulação de banco de dados
 │   │   └── BancoDeDados.java
 │   │
-│   ├── model/                      # Entidades e dispositivos médicos
+│   ├── main.java.model/                      # Entidades e dispositivos médicos
 │   │   ├── Dado.java
 │   │   ├── Paciente.java
 │   │   ├── DispositivoDeMonitoramento.java
@@ -29,10 +29,10 @@ Projeto-POO-master/
 │   │   ├── DispositivoDePressao.java
 │   │   └── DispositivoDeTemperatura.java
 │   │
-│   ├── view/                       # Interface de usuário via terminal
+│   ├── main.java.view/                       # Interface de usuário via terminal
 │   │   └── Menu.java
 │   │
-│   └── Main.java                   # Classe principal que inicia o sistema
+│   └── main.java.Main.java                   # Classe principal que inicia o sistema
 │
 ├── .gitignore                      # Arquivos ignorados pelo Git
 ├── Projeto-POO.iml                 # Arquivo de projeto (IntelliJ IDEA)
@@ -70,7 +70,7 @@ Projeto-POO-master/
    ```
 2. Execute a aplicação:
    ```bash
-   java src/Main
+   java src/main.java.Main
    ```
 ## 🙌 Contribuindo
 

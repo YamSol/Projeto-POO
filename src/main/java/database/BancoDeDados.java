@@ -1,8 +1,8 @@
-package database;
+package main.java.database;
 
-import model.DispositivoDeMonitoramento;
-import model.Paciente;
-import model.Dado;
+import main.java.model.DispositivoDeMonitoramento;
+import main.java.model.Paciente;
+import main.java.model.Dado;
 
 import java.io.*;
 import java.time.LocalDateTime;

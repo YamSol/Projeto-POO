@@ -1,4 +1,4 @@
-package controller;
+package main.java.controller;
 
 public class ConcentradorDeDados {
     private String bandaFrequencia;
