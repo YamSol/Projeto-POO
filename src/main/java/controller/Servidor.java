@@ -1,7 +1,7 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.Paciente;
-import main.java.database.BancoDeDados;
+import model.Paciente;
+import database.BancoDeDados;
 import java.util.List;
 import java.util.ArrayList;
 

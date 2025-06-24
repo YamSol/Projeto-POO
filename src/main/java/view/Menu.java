@@ -1,8 +1,8 @@
-package main.java.view;
+package view;
 
-import main.java.controller.ConcentradorDeDados;
-import main.java.model.*;
-import main.java.controller.Servidor;
+import controller.ConcentradorDeDados;
+import model.*;
+import controller.Servidor;
 import java.util.List;
 import java.util.Scanner;
 

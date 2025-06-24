@@ -32,7 +32,7 @@ Projeto-POO-master/
 │   ├── main.java.view/                       # Interface de usuário via terminal
 │   │   └── Menu.java
 │   │
-│   └── main.java.Main.java                   # Classe principal que inicia o sistema
+│   └── Main.java                   # Classe principal que inicia o sistema
 │
 ├── .gitignore                      # Arquivos ignorados pelo Git
 ├── Projeto-POO.iml                 # Arquivo de projeto (IntelliJ IDEA)
@@ -70,7 +70,7 @@ Projeto-POO-master/
    ```
 2. Execute a aplicação:
    ```bash
-   java src/main.java.Main
+   java src/Main
    ```
 ## 🙌 Contribuindo
 

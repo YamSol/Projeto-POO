@@ -48,7 +48,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>main.java.Main</mainClass> <!-- Altere se o nome do seu main.java.Main for diferente -->
+                    <mainClass>Main</mainClass> <!-- Altere se o nome do seu Main for diferente -->
                 </configuration>
             </plugin>
         </plugins>

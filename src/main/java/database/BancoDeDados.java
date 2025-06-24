@@ -1,142 +1,130 @@
-package main.java.database;
+package database;
 
-import main.java.model.DispositivoDeMonitoramento;
-import main.java.model.Paciente;
-import main.java.model.Dado;
+import model.Paciente;
+import model.Dado;
+import model.DispositivoDeMonitoramento;
 
-import java.io.*;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BancoDeDados {
-    private final String pastaDeArmazenamento = "dados/leituras/pacientes.txt";
 
-    // Salva os dados de um paciente no arquivo
     public void salvarPaciente(Paciente p) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(pastaDeArmazenamento, true))) {
-            writer.write("PacienteId:" + p.getId() + "," + "Nome: " + p.getNome());
-            writer.newLine();
-
-            for (DispositivoDeMonitoramento dispositivo : p.getDispositivos()) {
-                Dado dado = dispositivo.gerarDadoAleatorio();
-                writer.write(dispositivo.getTipo() + "," +
-                        dado.getValor() + "," +
-                        dado.getUnidade() + "," +
-                        dado.getTimestamp());
-                writer.newLine();
+        try (Connection conn = MySQLConnection.getConnection()) {
+            String insertPaciente = "INSERT INTO paciente (id, nome) VALUES (?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(insertPaciente)) {
+                stmt.setString(1, p.getId());
+                stmt.setString(2, p.getNome());
+                stmt.executeUpdate();
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar dados: " + e.getMessage());
+
+            String insertDado = "INSERT INTO dado (paciente_id, tipo, valor, unidade, timestamp) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(insertDado)) {
+                for (Dado d : p.getDadosPaciente()) {
+                    stmt.setString(1, p.getId());
+                    stmt.setString(2, d.getTipo());
+                    stmt.setString(3, d.getValor());
+                    stmt.setString(4, d.getUnidade());
+                    stmt.setTimestamp(5, Timestamp.valueOf(d.getTimestamp()));
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+            }
+
+            String insertDispositivo = "INSERT INTO dispositivo (paciente_id, tipo) VALUES (?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(insertDispositivo)) {
+                for (DispositivoDeMonitoramento d : p.getDispositivos()) {
+                    stmt.setString(1, p.getId());
+                    stmt.setString(2, d.getClass().getSimpleName());
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    // Busca um paciente pelo ID
     public Paciente buscarPacientePorId(String idBuscado) {
         Paciente paciente = null;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(pastaDeArmazenamento))) {
-            String linha;
-            boolean pacienteEncontrado = false;
+        try (Connection conn = MySQLConnection.getConnection()) {
+            String queryPaciente = "SELECT nome FROM paciente WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(queryPaciente)) {
+                stmt.setString(1, idBuscado);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    paciente = new Paciente(rs.getString("nome"), idBuscado);
+                }
+            }
 
-            while ((linha = reader.readLine()) != null) {
-                if (linha.startsWith("PacienteId:")) {
-                    String[] partes = linha.split(",");
-                    String id = partes[0].split(":")[1];
-
-                    if (idBuscado.equals(id)) {
-                        String nome = partes[1].split(":")[1].trim();
-                        paciente = new Paciente(nome, id);
-                        pacienteEncontrado = true;
-                    } else if (pacienteEncontrado) {
-                        break;
+            if (paciente != null) {
+                String queryDados = "SELECT tipo, valor, unidade, timestamp FROM dado WHERE paciente_id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(queryDados)) {
+                    stmt.setString(1, idBuscado);
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        Dado d = new Dado(
+                                rs.getString("tipo"),
+                                rs.getString("valor"),
+                                rs.getString("unidade"),
+                                rs.getTimestamp("timestamp").toLocalDateTime()
+                        );
+                        paciente.adicionarDadosPaciente(d);
                     }
-                } else if (pacienteEncontrado && paciente != null) {
-                    String[] dados = linha.split(",");
-                    if (dados.length == 4) {
-                        String tipo = dados[0].trim();
-                        String valor = dados[1].trim();
-                        String unidade = dados[2].trim();
-                        LocalDateTime timestamp = LocalDateTime.parse(dados[3].trim());
+                }
 
-                        Dado dado = new Dado(tipo, valor, unidade, timestamp);
-                        paciente.adicionarDadosPaciente(dado);
+                // Para simplificar, só adicionamos os nomes dos tipos de dispositivos
+                String queryDispositivos = "SELECT tipo FROM dispositivo WHERE paciente_id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(queryDispositivos)) {
+                    stmt.setString(1, idBuscado);
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        // Poderia usar reflexão ou um factory para criar os dispositivos reais
+                        // Aqui apenas printa o tipo, ou você pode mapear por classe
+                        System.out.println("Dispositivo encontrado: " + rs.getString("tipo"));
                     }
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return paciente;
     }
 
-    // Lista todos os pacientes salvos
     public List<Paciente> listarPacientes() {
-        List<Paciente> pacientes = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(pastaDeArmazenamento))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                if (linha.startsWith("PacienteId:")) {
-                    String[] partes = linha.split(",");
-                    String id = partes[0].split(":")[1];
-                    String nome = partes[1].split(":")[1].trim();
-                    Paciente paciente = new Paciente(nome, id);
-                    pacientes.add(paciente);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
-        }
-
-        return pacientes;
-    }
-
-    // Remove um paciente e seus dados do arquivo
-    public void removerPaciente(String id) {
-        File arquivoOriginal = new File(pastaDeArmazenamento);
-        File arquivoTemporario = new File("temp.txt");
-
-        try (
-                BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemporario))
-        ) {
-            String linha;
-            boolean dentroDoPaciente = false;
-
-            while ((linha = reader.readLine()) != null) {
-                if (linha.startsWith("PacienteId:")) {
-                    if (linha.contains("PacienteId:" + id)) {
-                        dentroDoPaciente = true;
-                        continue;
-                    } else {
-                        dentroDoPaciente = false;
+        List<Paciente> lista = new ArrayList<>();
+        try (Connection conn = MySQLConnection.getConnection()) {
+            String query = "SELECT id FROM paciente";
+            try (Statement stmt = conn.createStatement()) {
+                ResultSet rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    Paciente p = buscarPacientePorId(rs.getString("id"));
+                    if (p != null) {
+                        lista.add(p);
                     }
                 }
-
-                if (!dentroDoPaciente) {
-                    writer.write(linha);
-                    writer.newLine();
-                }
             }
-
-        } catch (IOException e) {
-            System.out.println("Erro ao processar arquivo: " + e.getMessage());
-            return;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return lista;
+    }
 
-        // Substitui o arquivo original pelo temporário
-        if (arquivoOriginal.delete()) {
-            if (!arquivoTemporario.renameTo(arquivoOriginal)) {
-                System.out.println("Erro ao renomear o arquivo temporário.");
-            } else {
-                System.out.println("Paciente com " + id + " removido com sucesso.");
+    public void removerPaciente(String id) {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            String delete = "DELETE FROM paciente WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(delete)) {
+                stmt.setString(1, id);
+                stmt.executeUpdate();
             }
-        } else {
-            System.out.println("Erro ao excluir o arquivo original.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        System.out.println();
     }
 }
